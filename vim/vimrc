@@ -9,9 +9,11 @@
 "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
 let $vimhome=fnamemodify(resolve(expand("~/.vimrc")), ':p:h')
+let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g ""'
 
 " Be iMproved
 set nocompatible
+set colorcolumn=100
 
 "=====================================================
 "" Vim Plug settings
@@ -39,13 +41,18 @@ call plug#begin('~/.vim/plugged')
     Plug 'flazz/vim-colorschemes'             " Colorschemes
     Plug 'airblade/vim-gitgutter'             " Git Gutter
     "Plug 'aserebryakov/vim-todo-lists'
-    Plug 'dracula/vim', { 'as': 'dracula' }
     Plug 'nanotech/jellybeans.vim'
     Plug 'NLKNguyen/papercolor-theme'
+    Plug 'ayu-theme/ayu-vim'
     Plug 'godlygeek/tabular'
     Plug 'plasticboy/vim-markdown'
     Plug 'scrooloose/vim-slumlord'
     Plug 'aklt/plantuml-syntax'
+    Plug 'jpo/vim-railscasts-theme'
+    Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+    Plug 'vim-test/vim-test'
+    Plug 'joshdick/onedark.vim'
+    Plug 'rakr/vim-one'
 
     "-----------------=== Languages support ===-------------------
     Plug 'tpope/vim-commentary'               " Comment stuff out
@@ -58,6 +65,16 @@ call plug#begin('~/.vim/plugged')
 
     "-----------------=== Python  ===-----------------------------
     "Plug 'davidhalter/jedi-vim'
+    "
+    "-----------------=== Ruby  ===-----------------------------
+    Plug 'tpope/vim-endwise'
+
+
+    "-----------------=== Javascript  ===-----------------------------
+    Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+
 
     "-----------------=== Golang  ===-----------------------------
     Plug 'fatih/vim-go'
@@ -78,11 +95,10 @@ syntax enable                               " syntax highlight
 set termguicolors
 
 set t_Co=256                                " set 256 colors
-"colorscheme wombat256mod                    " set color scheme
-colorscheme PaperColor
+colorscheme papercolor
 set background=dark
-"colorscheme equinusocio_material
-let g:airline_theme='papercolor'
+"colorscheme railscasts
+let g:airline_theme='badwolf'
 
 let g:blamer_enabled = 1
 let g:blamer_delay = 500
@@ -124,6 +140,7 @@ inoremap jk <Esc>
 " Sending dd to blackhole
 nnoremap d "_d
 nnoremap dd "_dd
+
 
 "=====================================================
 "" Tabs / Buffers settings
@@ -182,7 +199,7 @@ let g:airline_symbols.whitespace = 'Ξ'
 "" TagBar settings
 "=====================================================
 let g:tagbar_autofocus=0
-let g:tagbar_width=30
+let g:tagbar_width=50
 "autocmd BufEnter *.py :call tagbar#autoopen(0)
 "autocmd BufWinLeave *.py :TagbarClose
 nmap m :Tagbar<CR>
@@ -204,6 +221,11 @@ let g:snippets_dir='~/.vim/vim-snippets/snippets'
 "" Riv.vim settings
 "=====================================================
 let g:riv_disable_folding=1
+
+"=====================================================
+"" Ruby settings
+"=====================================================
+autocmd BufWritePre *.rb :%s/\s\+$//e
 
 "=====================================================
 "" Python settings
@@ -425,6 +447,7 @@ nmap <leader>a <Plug>(coc-codeaction-selected)
 " Ale
 let g:ale_fix_on_save = 1
 let g:ale_completion_enabled=0
+let g:ale_ruby_rubocop_executable='bundle'
 
 "=====================================================
 "" Fzf settings
@@ -439,3 +462,18 @@ let g:fzf_tags_command = 'ctags -R'
 " [Commands] --expect expression for directly executing the command
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 nnoremap <C-f> :FzfFiles<CR>
+nnoremap <C-x> :FzfBuffers<CR>
+
+
+"=====================================================
+"" Ruby settings
+"=====================================================
+inoremap <silent> <CR> <C-r>=<SID>coc_confirm()<CR>
+function! s:coc_confirm() abort
+  if pumvisible()
+    return coc#_select_confirm()
+  else
+    return "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+  endif
+endfunction
+nnoremap <C-R> :TestNearest<CR>
