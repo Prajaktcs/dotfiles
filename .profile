@@ -5,3 +5,4 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 export PATH=$PATH:/usr/local/bin:/usr/local/sbin
 
 alias vim=nvim
+
