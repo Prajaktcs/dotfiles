@@ -1,0 +1,6 @@
+*
+!config/
+!.profile
+!.tmux.conf
+!Brewfile
+!.gitignore
