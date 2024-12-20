@@ -103,8 +103,6 @@ function camelCase() {
   perl -pe 's#(_|^)(.)#\u$2#g'
 }
 
-alias kubectl="microk8s kubectl"
-
 parse_ascii(){
   iconv -f utf-8 -t ascii//TRANSLIT $1
 }

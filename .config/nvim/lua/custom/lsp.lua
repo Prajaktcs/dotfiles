@@ -53,7 +53,7 @@ local servers = {
   gopls = {},
   basedpyright = {},
   rust_analyzer = {},
-  ruff={},
+  ruff = {},
 
   lua_ls = {
     Lua = {
@@ -81,13 +81,6 @@ mason_lspconfig.setup_handlers {
 }
 
 require 'lspconfig'.terraformls.setup {}
-vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-  callback = function()
-    vim.lsp.buf.format()
-  end,
-  pattern = { "*.tf", "*.tfvars" },
-})
-
 local configs = require('lspconfig.configs')
 local lspconfig = require('lspconfig')
 local util = require('lspconfig.util')
@@ -107,4 +100,29 @@ end
 lspconfig.helm_ls.setup {
   filetypes = { "helm" },
   cmd = { "helm_ls", "serve" },
+}
+
+lspconfig.basedpyright.setup {
+  settings = {
+    basedpyright = {
+      -- Using Ruff's import organizer
+      disableOrganizeImports = true,
+    },
+    python = {
+      analysis = {
+        ignore = { '*' },
+      },
+    },
+  },
+}
+
+local on_attach = function(client, bufnr)
+  if client.name == 'ruff_lsp' then
+    -- Disable hover in favor of Pyright
+    client.server_capabilities.hoverProvider = false
+  end
+end
+
+require('lspconfig').ruff_lsp.setup {
+  on_attach = on_attach,
 }
