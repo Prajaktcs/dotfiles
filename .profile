@@ -2,7 +2,7 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
 export ANDROID_HOME=$HOME/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
-export PATH=$PATH:/usr/local/bin:/usr/local/sbin
+export PATH=$PATH:/usr/local/bin:/usr/local/sbin:~/.pulumi/bin
 
 alias vim=nvim
 
@@ -122,3 +122,9 @@ function base64_decode {
 # Load completion functions
 autoload -Uz +X compinit && compinit
 autoload -Uz +X bashcompinit && bashcompinit
+
+alias ls=eza
+
+function colima_start {
+    colima start --arch aarch64 --vm-type=vz --vz-rosetta --cpu 6 --memory 12 --disk 64
+}

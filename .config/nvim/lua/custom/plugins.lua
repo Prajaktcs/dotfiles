@@ -151,18 +151,24 @@ require('lazy').setup({
   { 'MunifTanjim/prettier.nvim' },
   { 'f-person/git-blame.nvim' },
   {
+    "NeogitOrg/neogit",
+    dependencies = {
+      "nvim-lua/plenary.nvim", -- required
+      "sindrets/diffview.nvim", -- optional - Diff integration
+
+      -- Only one of these is needed.
+      "nvim-telescope/telescope.nvim", -- optional
+      "ibhagwan/fzf-lua",            -- optional
+      "echasnovski/mini.pick",       -- optional
+    },
+    config = true
+  },
+  {
     'ldelossa/gh.nvim',
     dependencies = {
       'ldelossa/litee.nvim' }
   },
   { 'tpope/vim-abolish' },
-  {
-    "kdheepak/lazygit.nvim",
-    -- optional for floating window border decoration
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-  },
   { "almo7aya/openingh.nvim" },
   {
     "epwalsh/obsidian.nvim",
