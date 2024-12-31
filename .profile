@@ -12,12 +12,23 @@ alias nv="nvim"
 
 function git_delete_merged() {
     git branch --merged | egrep -v "(^\*|master|dev)" | xargs git branch -d
-    echo "Pruning"
+    echo "pruning"
     git remote prune origin
 }
 
 function git_delete_squashed_merged() {
     git checkout -q master && git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base master $branch) && [[ $(git cherry master $(git commit-tree $(git rev-parse $branch^{tree}) -p $mergeBase -m _)) == "-"* ]] && git branch -D $branch; done
+}
+
+
+function git_delete_squashed_merged_main() {
+    git checkout -q main && git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base main $branch) && [[ $(git cherry main $(git commit-tree $(git rev-parse $branch^{tree}) -p $mergeBase -m _)) == "-"* ]] && git branch -D $branch; done
+}
+
+function git_delete_merged_main() {
+    git branch --merged | egrep -v "(^\*|main|dev)" | xargs git branch -d
+    echo "pruning"
+    git remote prune origin
 }
 
 
