@@ -3,9 +3,10 @@ local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
 null_ls.setup({
     sources = {
-      null_ls.builtins.diagnostics.tfsec,
-      null_ls.builtins.diagnostics.trivy,
-      null_ls.builtins.formatting.opentofu_fmt
+        null_ls.builtins.diagnostics.tfsec,
+        null_ls.builtins.diagnostics.trivy,
+        null_ls.builtins.formatting.opentofu_fmt,
+        null_ls.builtins.formatting.prettierd
     },
     -- you can reuse a shared lspconfig on_attach callback here
     on_attach = function(client, bufnr)

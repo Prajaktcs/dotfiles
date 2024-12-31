@@ -40,6 +40,11 @@ function co_master_pull() {
     git pull --rebase origin master
 }
 
+function co_main_pull() {
+    git checkout main
+    git pull --rebase origin main
+}
+
 function tmux_list_sessions() {
     tmux ls && read tmux_session && tmux attach -t ${tmux_session:-default} || tmux new -s ${tmux_session:-default}
 }
