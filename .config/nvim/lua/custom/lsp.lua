@@ -54,7 +54,7 @@ local servers = {
   basedpyright = {},
   rust_analyzer = {},
   ruff = {},
-
+  vtsls = {},
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
