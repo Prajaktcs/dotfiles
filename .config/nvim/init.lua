@@ -27,7 +27,6 @@ require('custom.leader_shortcuts')
 require('custom.treesitter')
 require('custom.lsp')
 require('custom.prettier')
-require('custom.linter')
 require('custom.copilot')
 require('custom.none_ls')
 
