@@ -36,11 +36,6 @@ local on_attach = function(_, bufnr)
   nmap('<leader>wl', function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
-
-  -- Create a command `:Format` local to the LSP buffer
-  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-    vim.lsp.buf.format()
-  end, { desc = 'Format current buffer with LSP' })
 end
 
 -- Enable the following language servers
@@ -116,13 +111,44 @@ lspconfig.basedpyright.setup {
   },
 }
 
-local on_attach = function(client, bufnr)
-  if client.name == 'ruff' then
-    -- Disable hover in favor of Pyright
-    client.server_capabilities.hoverProvider = false
-  end
+for server, config in pairs(servers) do
+  config.capabilities = require('blink.cmp').get_lsp_capabilities(config.capabilities)
+  lspconfig[server].setup(config)
 end
 
-require('lspconfig').ruff.setup {
+
+-- 2) Function to attach to LSP clients
+local on_attach = function(client, bufnr)
+  -- Auto-command group to organize imports and fix lint errors on save
+  local group = vim.api.nvim_create_augroup("RuffFormatAndSortOnSave", { clear = true })
+  vim.api.nvim_create_autocmd("BufWritePre", {
+    group = group,
+    buffer = bufnr,
+    callback = function()
+      -- 1) Run ruff-lsp auto-fixes for lint issues
+      vim.lsp.buf.code_action({
+        context = { only = { "source.fixAll" } },
+        apply = true
+      })
+
+      -- 2) Format with any registered formatter 
+      -- (If using ruff-lsp *only* for lint fixes, it won't actually format code. 
+      --  If you have another formatter like Black/Prettier, it will run here.)
+      vim.lsp.buf.format({ async = false })
+    end,
+  })
+end
+
+-- 3) Setup ruff-lsp via nvim-lspconfig
+require("lspconfig").ruff.setup({
   on_attach = on_attach,
-}
+  -- init_options: enable the code actions for auto-fixes and organizing imports
+  init_options = {
+    settings = {
+      -- organizeImports = true lets Ruff reorder your imports
+      organizeImports = true,
+      -- fixAll = true allows Ruff to auto-fix lints that support it
+      fixAll = true,
+    },
+  },
+})
