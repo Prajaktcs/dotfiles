@@ -1,5 +1,5 @@
 *
-!.config/**
+!.config/**/*
 !.profile
 !.tmux.conf
 !Brewfile

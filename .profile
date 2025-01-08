@@ -137,3 +137,5 @@ function colima_start {
     colima start --arch aarch64 --vm-type=vz --vz-rosetta --cpu 6 --memory 12 --disk 64
 }
 . "$HOME/.cargo/env"
+
+eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/tokyonight_storm.omp.json)"
