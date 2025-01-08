@@ -45,13 +45,9 @@ function kill_process_on_port() {
 }
 
 function co_master_pull() {
-    git checkout master
-    git pull --rebase origin master
-}
-
-function co_main_pull() {
-    git checkout main
-    git pull --rebase origin main
+    branch=$(git branch -l main master --format '%(refname:short)')
+    git checkout $branch
+    git pull --rebase origin $branch
 }
 
 function tmux_list_sessions() {
