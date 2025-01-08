@@ -1,6 +1,5 @@
 *
-!.config/*
-!.config/kitty/*
+!.config/**
 !.profile
 !.tmux.conf
 !Brewfile
