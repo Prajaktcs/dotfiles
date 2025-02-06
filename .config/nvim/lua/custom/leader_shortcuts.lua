@@ -40,6 +40,7 @@ vim.keymap.set('n', '<leader>tv', ":TestVisit", { desc = "Visit the file that wa
 vim.keymap.set('n', '<leader>g', ":Github<cr>", { desc = 'Github' })
 vim.keymap.set('n', '<leader>gf', ":OpenInGHFile", { desc = "Open the current file in github" })
 vim.keymap.set('n', '<leader>gl', ":OpenInGHFileLines", { desc = "Open the current file line in github" })
+vim.keymap.set('n', '<leader>gn', ":Neogit", { desc = "Open Neogit" })
 
 -- [[ Configuring Code actions ]]
 vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { buffer = true, desc = "Trigger LSP code action" })

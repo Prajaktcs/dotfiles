@@ -152,3 +152,30 @@ require("lspconfig").ruff.setup({
     },
   },
 })
+
+lspconfig.yamlls.setup({
+  settings = {
+    yaml = {
+      schemas = {
+        -- Option A: Using online URLs for schemas
+        ["https://github.com/external-secrets/external-secrets/blob/main/deploy/crds/bundle.yaml"] = "nucleus/**/*.yaml",
+        ["https://github.com/strimzi/strimzi-kafka-operator/blob/main/install/cluster-operator/047-Crd-kafkaconnector.yaml"] = "nucleus/**/*.yaml",
+        ["https://github.com/argoproj/argo-cd/blob/master/manifests/crds/application-crd.yaml"] = "nucleus/**/*.yaml",
+        ["https://github.com/argoproj/argo-cd/blob/master/manifests/crds/applicationset-crd.yaml"] = "nucleus/**/*.yaml",
+
+        -- Option B: Using local schema files (uncomment and adjust paths if needed)
+        -- ["file:///Users/yourusername/.config/nvim/schemas/argo_external_secrets_operator_schema.json"] = "argo-external-secrets/**/*.yaml",
+        -- ["file:///Users/yourusername/.config/nvim/schemas/strimzi_schema.json"] = "strimzi/**/*.yaml",
+      },
+      -- Other YAML settings (you can adjust these as needed)
+      validate = true,
+      hover = true,
+      completion = true,
+    },
+  },
+  on_attach = function(client, bufnr)
+    -- Optional: Add any custom on_attach functionality here
+  end,
+})
+
+
