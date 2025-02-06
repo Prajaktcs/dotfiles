@@ -127,6 +127,10 @@ function base64_decode {
   echo $1 | base64 -d
 }
 
+function num_of_prs_today () {
+    gh pr list --author Prajaktcs --state all --search "created:$(date +%Y-%m-%d)" | wc -l
+}
+
 # Load completion functions
 autoload -Uz +X compinit && compinit
 autoload -Uz +X bashcompinit && bashcompinit
