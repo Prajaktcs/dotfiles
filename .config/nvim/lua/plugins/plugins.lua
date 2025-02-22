@@ -6,6 +6,10 @@
 -- * override the configuration of LazyVim plugins
 return {
   {
+    "williamboman/mason.nvim",
+    opts = { ensure_installed = { "shellcheck", "prettier" } },
+  },
+  {
     "williamboman/mason-lspconfig.nvim",
     opts = {
       ensure_installed = {
@@ -17,7 +21,6 @@ return {
         "terraformls",
         "tflint",
         "jsonls",
-        "prettier",
       },
       servers = {
         on_new_config = function(new_config)
@@ -30,6 +33,9 @@ return {
               enable = true,
             },
             validate = { enable = true },
+          },
+          shfmt = {
+            extra_args = { "-i", "4" },
           },
         },
       },
@@ -116,5 +122,38 @@ return {
         },
       }
     end,
+  },
+  {
+    "nvimtools/none-ls.nvim",
+    optional = true,
+    opts = function(_, opts)
+      local null_ls = require("null-ls")
+      opts.sources = vim.list_extend(opts.sources or {}, {
+        null_ls.builtins.formatting.opentofu_fmt,
+        null_ls.builtins.diagnostics.opentofu_validate,
+      })
+    end,
+  },
+  {
+    "stevearc/conform.nvim",
+    opts = {
+      formatters_by_ft = {
+        tf = { "tfmt" },
+        terraform = { "tfmt" },
+        hcl = { "tfmt" },
+        sh = { "shfmt" },
+      },
+      formatters = {
+        tfmt = {
+          -- Specify the command and its arguments for formatting
+          command = "tofu",
+          args = { "fmt", "-" },
+          stdin = true,
+        },
+        shfmt = {
+          prepend_args = { "-i", "4", "ci" },
+        },
+      },
+    },
   },
 }
