@@ -41,6 +41,22 @@ return {
       },
     },
   },
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        basedpyright = {
+          settings = {
+            basedpyright = {
+              analysis = {
+                typeCheckingMode = "standard",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 
   -- add more treesitter parsers
   {
@@ -155,5 +171,22 @@ return {
         },
       },
     },
+  },
+  {
+    "folke/snacks.nvim",
+    opts = {
+      picker = {
+        hidden = true, -- for hidden files
+        ignored = true, -- for .gitignore files
+      },
+    },
+  },
+  {
+    "NeogitOrg/neogit",
+    dependencies = {
+      "nvim-lua/plenary.nvim", -- required
+      "sindrets/diffview.nvim", -- optional - Diff integration
+    },
+    config = true,
   },
 }
