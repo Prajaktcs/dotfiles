@@ -158,6 +158,7 @@ return {
         terraform = { "tfmt" },
         hcl = { "tfmt" },
         sh = { "shfmt" },
+        python = { "ruff_format" },
       },
       formatters = {
         tfmt = {

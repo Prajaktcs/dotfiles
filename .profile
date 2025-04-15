@@ -127,6 +127,8 @@ autoload -Uz +X compinit && compinit
 autoload -Uz +X bashcompinit && bashcompinit
 
 alias ls=eza
+alias z=zoxide
+eval "$(zoxide init zsh)"
 
 function colima_start {
   colima start --arch aarch64 --vm-type=vz --vz-rosetta --cpu 6 --memory 12 --disk 64
