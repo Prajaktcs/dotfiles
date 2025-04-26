@@ -54,6 +54,12 @@ return {
             },
           },
         },
+        jdtls = {},
+      },
+      setup = {
+        jdtls = function()
+          return true -- avoid duplicate servers
+        end,
       },
     },
   },
@@ -80,6 +86,7 @@ return {
         "terraform",
         "ruby",
         "hcl",
+        "java",
       },
     },
   },
