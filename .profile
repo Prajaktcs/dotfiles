@@ -137,3 +137,5 @@ EZA_CONFIG_DIR=~/.config/eza/
 . "$HOME/.cargo/env"
 
 eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/tokyonight_storm.omp.json)"
+
+source ~/.keys

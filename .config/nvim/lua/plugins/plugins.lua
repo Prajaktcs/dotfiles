@@ -223,8 +223,59 @@ return {
           path = "~/Documents/Projects/notes",
         },
       },
-
+      daily_notes = {
+        -- Optional, if you keep daily notes in a separate directory.
+        folder = "0. Landing area",
+        -- Optional, if you want to change the date format for the ID of daily notes.
+        date_format = "%Y-%m-%d",
+        -- Optional, if you want to change the date format of the default alias of daily notes.
+        alias_format = "%B %-d, %Y",
+        -- Optional, default tags to add to each new daily note created.
+        default_tags = { "daily-notes" },
+        -- Optional, if you want to automatically insert a template from your template directory like 'daily.md'
+        template = "DailyTemplate.md",
+      },
+      templates = {
+        folder = "Templates",
+        date_format = "%Y-%m-%d",
+        time_format = "%H:%M",
+        -- A map for custom variables, the key should be the variable and the value a function
+        substitutions = {},
+      },
       -- see below for full list of options 👇
     },
+  },
+  {
+    "PedramNavid/dbtpal",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+    },
+    ft = {
+      "sql",
+      "md",
+      "yaml",
+    },
+    keys = {
+      { "<leader>drf", "<cmd>DbtRun<cr>" },
+      { "<leader>drp", "<cmd>DbtRunAll<cr>" },
+      { "<leader>dtf", "<cmd>DbtTest<cr>" },
+      { "<leader>dm", "<cmd>lua require('dbtpal.telescope').dbt_picker()<cr>" },
+    },
+    config = function()
+      require("dbtpal").setup({
+        path_to_dbt = "dbt",
+        path_to_dbt_project = "",
+        path_to_dbt_profiles_dir = vim.fn.expand("~/.dbt"),
+        include_profiles_dir = true,
+        include_project_dir = true,
+        include_log_level = true,
+        extended_path_search = true,
+        protect_compiled_files = true,
+        pre_cmd_args = {},
+        post_cmd_args = {},
+      })
+      require("telescope").load_extension("dbtpal")
+    end,
   },
 }
