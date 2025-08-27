@@ -128,6 +128,7 @@ autoload -Uz +X bashcompinit && bashcompinit
 
 alias ls=eza
 alias z=zoxide
+alias t=tofu
 eval "$(zoxide init zsh)"
 
 function colima_start {
