@@ -6,11 +6,11 @@
 -- * override the configuration of LazyVim plugins
 return {
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     opts = { ensure_installed = { "shellcheck", "prettier" } },
   },
   {
-    "williamboman/mason-lspconfig.nvim",
+    "mason-org/mason-lspconfig.nvim",
     opts = {
       ensure_installed = {
         "basedpyright",
@@ -18,7 +18,7 @@ return {
         "yamlls",
         "ruby_lsp",
         "helm_ls",
-        "terraformls",
+        "tofu_ls",
         "tflint",
         "jsonls",
       },
