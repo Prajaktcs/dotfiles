@@ -5,9 +5,11 @@
 
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 AGENTS_DIR="$HOME/.agents"
 BASE_FILE="$AGENTS_DIR/base.md"
 SKILLS_SRC="$AGENTS_DIR/antigravity/skills"
+SKILLS_REPO="$SCRIPT_DIR/skills"
 
 echo "🔧 Setting up ~/.agents directory structure..."
 
@@ -23,6 +25,23 @@ mkdir -p \
   "$AGENTS_DIR/windsurf"
 
 echo "✅ Directory structure created at $AGENTS_DIR"
+
+# -------------------------------------------------------------------
+# 1b. Seed skills from the repo into ~/.agents/antigravity/skills/
+# -------------------------------------------------------------------
+if [ -d "$SKILLS_REPO" ]; then
+  for skill_dir in "$SKILLS_REPO"/*/; do
+    if [ -d "$skill_dir" ]; then
+      skill_name=$(basename "$skill_dir")
+      skill_dst="$SKILLS_SRC/$skill_name"
+      rm -rf "$skill_dst"
+      cp -r "$skill_dir" "$skill_dst"
+      echo "📦 Skill:       $skill_dst"
+    fi
+  done
+else
+  echo "⚠️  No skills/ directory found at $SKILLS_REPO"
+fi
 
 # -------------------------------------------------------------------
 # 2. Check for base.md
@@ -44,10 +63,19 @@ mkdir -p "$HOME/.claude"
 CLAUDE_SRC="$AGENTS_DIR/claude/CLAUDE.md"
 CLAUDE_DST="$HOME/.claude/CLAUDE.md"
 
-if [ ! -f "$CLAUDE_SRC" ]; then
-  cp "$BASE_FILE" "$CLAUDE_SRC" 2>/dev/null || touch "$CLAUDE_SRC"
-  echo "📄 Created $CLAUDE_SRC (seeded from base.md)"
-fi
+# Always regenerate — imports base + every skill so Claude Code picks them all up
+{
+  echo "@../base.md"
+  echo ""
+  echo "# Skills"
+  for skill_dir in "$SKILLS_SRC"/*/; do
+    if [ -d "$skill_dir" ]; then
+      skill_name=$(basename "$skill_dir")
+      echo "@../antigravity/skills/$skill_name/SKILL.md"
+    fi
+  done
+} > "$CLAUDE_SRC"
+echo "📄 Claude CLAUDE.md regenerated with $(ls "$SKILLS_SRC" | wc -l | tr -d ' ') skill imports"
 
 ln -sf "$CLAUDE_SRC" "$CLAUDE_DST"
 echo "🔗 Claude:      $CLAUDE_DST → $CLAUDE_SRC"

@@ -5,3 +5,4 @@
 !Brewfile
 !.gitignore
 !setup-agents/
+!setup-agents/**
