@@ -6,3 +6,4 @@
 !.gitignore
 !setup-agents/
 !setup-agents/**
+!aws-version-watch-state.json
