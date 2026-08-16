@@ -1,8 +1,8 @@
 {
-  "msk": {"version": "4.2.x", "checked_at": "2026-08-15"},
-  "mwaa": {"version": "v3.2.1", "checked_at": "2026-08-15"},
-  "emr_serverless": {"version": "emr-7.13.0", "checked_at": "2026-08-15"},
-  "redshift": {"version": "1.0.394035", "checked_at": "2026-08-15"},
-  "athena": {"version": "Athena engine version 3", "checked_at": "2026-08-15"},
-  "iceberg": {"version": "apache-iceberg-1.11.0", "checked_at": "2026-08-15"}
+  "msk": {"version": "4.2.x", "checked_at": "2026-08-16"},
+  "mwaa": {"version": "v3.2.1", "checked_at": "2026-08-16"},
+  "emr_serverless": {"version": "emr-7.13.0", "checked_at": "2026-08-16"},
+  "redshift": {"version": "1.0.394035", "checked_at": "2026-08-16"},
+  "athena": {"version": "Athena engine version 3", "checked_at": "2026-08-16"},
+  "iceberg": {"version": "apache-iceberg-1.11.0", "checked_at": "2026-08-16"}
 }
