@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+"""Local-only Claude/omp alerts. Clicks select the source tmux pane.
+
+Usage: agent-notify claude|omp done|attention
+Claude hook mode: agent-notify claude (reads only hook event metadata from stdin).
+Requires the bundled Agent Notify.app and macOS notification permission.
+Enable Agent Notify in System Settings > Notifications; restart agents after hook changes.
+Clicks select the pane using the most recently active tmux client and activate Ghostty.
+Multiple Ghostty windows are not individually targeted. No client attached means no navigation.
+Targets expire after seven days; no transcript text is read or shown.
+Native source: ~/.local/share/agent-notify/AgentNotify.swift.
+App diagnostics: run its Contents/MacOS/AgentNotify binary with --status
+(authorization 0=not determined, 1=denied, 2=authorized).
+--select-pane <request UUID> navigates tmux without activating Ghostty.
+"""
+import json
+import os
+from pathlib import Path
+import re
+import shutil
+import subprocess
+import sys
+import time
+import uuid
+
+ROOT = Path.home() / '.local/share/agent-notify'
+TMUX = shutil.which('tmux')
+
+
+def main():
+    agent = sys.argv[1]
+    if agent not in ('claude', 'omp'):
+        raise ValueError('agent must be claude or omp')
+    if len(sys.argv) > 2:
+        event = sys.argv[2]
+    else:
+        hook = json.load(sys.stdin)
+        if hook.get('hook_event_name') == 'Stop':
+            if hook.get('stop_hook_active'):
+                return
+            event = 'done'
+        elif hook.get('hook_event_name') == 'Notification':
+            event = 'attention'
+        else:
+            return
+    if event not in ('done', 'attention'):
+        raise ValueError('event must be done or attention')
+    pane = os.environ.get('TMUX_PANE', '')
+    tmux_env = os.environ.get('TMUX', '')
+    if not tmux_env or not re.fullmatch(r'%[0-9]+', pane):
+        return
+    socket = tmux_env.rsplit(',', 2)[0]
+    def tmux(*args):
+        return subprocess.check_output([TMUX, '-S', socket, *args], text=True, timeout=3).strip()
+    session = tmux('display-message', '-p', '-t', pane, '#{session_name}')
+    requests = ROOT / 'requests'
+    requests.mkdir(mode=0o700, parents=True, exist_ok=True)
+    requests.chmod(0o700)
+    # Bound retained click targets; old notifications expire after a week.
+    for old in requests.glob('*.json'):
+        if old.stat().st_mtime < time.time() - 7 * 86400:
+            old.unlink()
+    token = str(uuid.uuid4())
+    payload = {'socket': socket, 'pane': pane, 'tmux': TMUX,
+               'title': f'{session} · {"Claude" if agent == "claude" else "omp"}',
+               'body': 'Finished — click to open' if event == 'done' else 'Needs input — click to open'}
+    with (requests / f'{token}.json').open('x') as output:
+        os.chmod(output.name, 0o600)
+        json.dump(payload, output)
+    subprocess.run(['/usr/bin/open', '-g', '-a', str(ROOT / 'Agent Notify.app'),
+                    f'local-agent-notify://notify/{token}'], check=True, timeout=5)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as error:
+        print(f'agent-notify: {error}', file=sys.stderr)
+        sys.exit(1)
