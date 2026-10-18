@@ -13,7 +13,7 @@ return {
     "mason-org/mason-lspconfig.nvim",
     opts = {
       ensure_installed = {
-        "basedpyright",
+        "ty",
         "ruff",
         "yamlls",
         "ruby_lsp",
@@ -45,15 +45,6 @@ return {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        basedpyright = {
-          settings = {
-            basedpyright = {
-              analysis = {
-                typeCheckingMode = "standard",
-              },
-            },
-          },
-        },
         jdtls = {},
       },
       setup = {
@@ -183,5 +174,8 @@ return {
       })
       require("telescope").load_extension("dbtpal")
     end,
+  },
+  {
+    "sindrets/diffview.nvim",
   },
 }

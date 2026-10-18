@@ -114,6 +114,25 @@ function start_tmux {
   tmux new -s $1 -c $projects_dir/$tmux_session_dir
 }
 
+function llama_server {
+  llama-server -hf unsloth/Qwen3.8-27B-GGUF:UD-Q4_K_XL \
+    -ngl all \
+    -fa on \
+    -np 1 \
+    -t 6 \
+    -c 32768 \
+    -b 2048 \
+    -ub 512 \
+    --image-min-tokens 1024 \
+    --reasoning-preserve \
+    --temp 1.0 \
+    --top-p 0.95 \
+    --top-k 20 \
+    --min-p 0.0
+}
+
+source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/wtmux.zsh"
+
 function base64_decode {
   echo $1 | base64 -d
 }
@@ -122,22 +141,25 @@ function num_of_prs_today() {
   gh pr list --author Prajaktcs --state all --search "created:$(date +%Y-%m-%d)" | wc -l
 }
 
+
 # Load completion functions
 autoload -Uz +X compinit && compinit
 autoload -Uz +X bashcompinit && bashcompinit
 source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/wtmux.zsh"
+compdef _wtmux wtmux
 
 alias ls=eza
 alias z=zoxide
 alias t=tofu
+alias claude='claude update && claude'
 eval "$(zoxide init zsh)"
 
 function colima_start {
   colima start --arch aarch64 --vm-type=vz --vz-rosetta --cpu 6 --memory 12 --disk 64
 }
 EZA_CONFIG_DIR=~/.config/eza/
-. "$HOME/.cargo/env"
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
-eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/tokyonight_storm.omp.json)"
 
 source ~/.keys
+
