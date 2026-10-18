@@ -125,6 +125,7 @@ function num_of_prs_today() {
 # Load completion functions
 autoload -Uz +X compinit && compinit
 autoload -Uz +X bashcompinit && bashcompinit
+source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/wtmux.zsh"
 
 alias ls=eza
 alias z=zoxide
