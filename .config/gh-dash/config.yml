@@ -89,6 +89,9 @@ keybindings:
         zsh -ic 'cd "${1:-$HOME/Documents/Projects/${2##*/}}" && lazygit'
         -- '{{.RepoPath}}' '{{.RepoName}}'
   prs:
+    - key: E
+      name: edit PR in Vim
+      command: GH_EDITOR=vim gh pr edit '{{.PrNumber}}' --repo '{{.RepoName}}'
     - key: C
       name: review PR in worktree with Claude
       command: >
