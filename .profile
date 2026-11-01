@@ -5,6 +5,7 @@ export PATH=$PATH:/usr/local/bin:/usr/local/sbin:~/.pulumi/bin
 alias vim=nvim
 
 export LANG="en_US.UTF-8"
+export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
 
 alias nv="nvim"
 
@@ -152,6 +153,7 @@ alias ls=eza
 alias z=zoxide
 alias t=tofu
 alias claude='claude update && claude'
+alias omp='omp update && omp'
 eval "$(zoxide init zsh)"
 
 function colima_start {
@@ -163,3 +165,5 @@ EZA_CONFIG_DIR=~/.config/eza/
 
 source ~/.keys
 
+
+. "$HOME/.atuin/bin/env"
