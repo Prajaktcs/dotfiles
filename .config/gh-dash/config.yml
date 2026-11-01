@@ -86,18 +86,24 @@ keybindings:
     - key: g
       name: lazygit
       command: >
-        zsh -ic 'cd "${1:-$HOME/Documents/Projects/${2##*/}}" && lazygit'
-        -- '{{.RepoPath}}' '{{.RepoName}}'
+        zsh -ic 'cd "$HOME/Documents/Projects/${1##*/}" && lazygit'
+        -- '{{.RepoName}}'
   prs:
+    - key: E
+      name: edit PR in Vim
+      command: GH_EDITOR=vim gh pr edit '{{.PrNumber}}' --repo '{{.RepoName}}'
+    - key: R
+      name: review (gh-review)
+      command: gh-review '{{.RepoName}}' '{{.PrNumber}}'
     - key: C
       name: review PR in worktree with Claude
       command: >
-        zsh -ic 'wtmux "PR-$1" --repo "${3:-$HOME/Documents/Projects/${2##*/}}" --pr "https://github.com/$2/pull/$1"'
-        -- '{{.PrNumber}}' '{{.RepoName}}' '{{.RepoPath}}'
+        zsh -ic 'wtmux "PR-$1" --repo "$HOME/Documents/Projects/${2##*/}" --pr "https://github.com/$2/pull/$1"'
+        -- '{{.PrNumber}}' '{{.RepoName}}'
 
 
-# Optional checkout mappings override the default ~/Documents/Projects/<repo-name>.
-# Keep company-specific mappings in a private config, not in public dotfiles.
+# Custom bindings resolve checkouts as ~/Documents/Projects/<repo-name>.
+# repoPaths does not affect these bindings.
 repoPaths: {}
 theme:
     ui:
@@ -109,5 +115,5 @@ pager:
     diff: diffnav
 confirmQuit: false
 showAuthorIcons: true
-smartFilteringAtLaunch: true
+smartFilteringAtLaunch: false
 includeReadNotifications: true
